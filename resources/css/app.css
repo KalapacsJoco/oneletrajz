@@ -1,0 +1,206 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource/anton';
+
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, sans-serif;
+    --font-impact: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+    --color-ink: #090909;
+    --color-panel: #101012;
+}
+
+:root {
+    --accent-from: #e63946;
+    --accent-to: #2ec27e;
+}
+
+html { background: var(--color-ink); }
+
+[x-cloak] { display: none !important; }
+
+body {
+    background: var(--color-ink);
+    color: #e9e9ee;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* Meleg, piros fény felül, sötét keret – a referencia hangulata */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(60rem 28rem at 50% -8rem, color-mix(in srgb, var(--accent-from) 26%, transparent), transparent 70%),
+        radial-gradient(40rem 30rem at 100% 100%, color-mix(in srgb, var(--accent-to) 9%, transparent), transparent 70%),
+        radial-gradient(ellipse at center, transparent 45%, rgb(0 0 0 / .55) 100%);
+}
+
+::selection { background: color-mix(in srgb, var(--accent-from) 70%, transparent); color: white; }
+
+.grad-text {
+    background: linear-gradient(110deg in oklch, var(--accent-from), var(--accent-to));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.grad-bg { background: linear-gradient(120deg in oklch, var(--accent-from), var(--accent-to)); }
+
+.red-text { color: var(--accent-from); }
+
+/* Sakktábla padló: halvány, a háttér része */
+.chess-floor {
+    position: fixed;
+    left: -25%;
+    right: -25%;
+    bottom: -8vh;
+    height: 50vh;
+    z-index: 0;
+    pointer-events: none;
+    transform: perspective(500px) rotateX(62deg);
+    transform-origin: bottom;
+    background: conic-gradient(color-mix(in srgb, var(--accent-from) 10%, transparent) 25%, transparent 0 50%, color-mix(in srgb, var(--accent-from) 10%, transparent) 0 75%, transparent 0) 0 0 / 96px 96px;
+    mask-image: linear-gradient(to top, black, transparent 85%);
+    -webkit-mask-image: linear-gradient(to top, black, transparent 85%);
+}
+
+.checker-mini {
+    background: conic-gradient(var(--accent-from) 25%, rgb(255 255 255 / .06) 0 50%, var(--accent-from) 0 75%, rgb(255 255 255 / .06) 0) 0 0 / 32px 32px;
+}
+
+/* Kártyák */
+.card {
+    position: relative;
+    background: linear-gradient(180deg, rgb(255 255 255 / .035), rgb(255 255 255 / .01)), rgb(14 14 16 / .82);
+    border: 1px solid rgb(255 255 255 / .08);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(10px);
+    transition: border-color .25s, background-color .25s;
+}
+
+a.card:hover, .card-hover:hover { border-color: color-mix(in srgb, var(--accent-from) 65%, transparent); }
+
+.card-red {
+    position: relative;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--accent-from) 45%, transparent);
+    background:
+        radial-gradient(24rem 14rem at 0% 0%, color-mix(in srgb, var(--accent-from) 55%, transparent), transparent 70%),
+        linear-gradient(160deg, color-mix(in srgb, var(--accent-from) 38%, #000), #12070a);
+}
+
+.label {
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent-from);
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgb(255 255 255 / .12);
+    border-radius: .5rem;
+    padding: .3rem .7rem;
+    font-size: .75rem;
+    letter-spacing: .04em;
+    color: rgb(255 255 255 / .75);
+    background: rgb(255 255 255 / .03);
+    transition: background-color .2s, border-color .2s, color .2s;
+}
+
+a.chip:hover { border-color: var(--accent-from); color: white; }
+.chip-active { background: var(--accent-from); border-color: var(--accent-from); color: white; }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .75rem;
+    padding: .75rem 1.4rem;
+    font-weight: 600;
+    font-size: .9rem;
+    transition: filter .2s, border-color .2s, background-color .2s;
+}
+
+.btn-primary { background: var(--accent-from); color: white; }
+.btn-primary:hover { filter: brightness(1.12); }
+.btn-ghost { border: 1px solid rgb(255 255 255 / .16); color: white; }
+.btn-ghost:hover { border-color: var(--accent-from); background: rgb(255 255 255 / .04); }
+
+/* Főoldali óriás felirat a kép mögött */
+.hero-word {
+    font-family: var(--font-impact);
+    text-transform: uppercase;
+    line-height: .86;
+    padding-top: .16em;
+    margin-bottom: -.1em;
+    letter-spacing: .01em;
+    white-space: nowrap;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent-from) 100%, #fff 6%) 15%, color-mix(in srgb, var(--accent-from) 55%, #000) 75%, color-mix(in srgb, var(--accent-from) 20%, #000));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+}
+
+.photo-fade {
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+.hero-photo {
+    overflow: hidden;
+    border-radius: 9999px;
+    border: 3px solid var(--accent-from);
+    background: #0b0b0b;
+    box-shadow: 0 0 0 10px rgb(255 255 255 / .04), 0 25px 70px -15px color-mix(in srgb, var(--accent-from) 40%, transparent);
+}
+
+.page-title {
+    font-family: var(--font-impact);
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    line-height: .95;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    line-height: 1.05;
+}
+
+.prose-about p { margin-bottom: 1rem; color: #b9b9c4; line-height: 1.8; }
+.prose-about strong { color: white; }
+.prose-about a { color: var(--accent-from); text-decoration: underline; }
+.prose-about ul { list-style: disc; padding-left: 1.25rem; color: #b9b9c4; }
+.prose-about ol { list-style: decimal; padding-left: 1.25rem; color: #b9b9c4; margin-bottom: 1rem; }
+.prose-about li { margin-bottom: .35rem; line-height: 1.7; }
+.prose-about h3 { color: white; font-weight: 600; margin: 1rem 0 .5rem; }
+
+.timeline-line { background: linear-gradient(to bottom in oklch, var(--accent-from), var(--accent-to), transparent); }
+
+.noise {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: .04;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
