@@ -49,22 +49,27 @@
             </nav>
 
             <div class="flex items-center gap-2">
-                <div class="flex items-center rounded-lg border border-white/10 text-xs font-medium" role="group" aria-label="{{ __('Nyelv') }}">
+                <div class="hidden items-center rounded-lg border border-white/10 text-xs font-medium lg:flex" role="group" aria-label="{{ __('Nyelv') }}">
                     @foreach (config('app.locales') as $code => $name)
                         <a href="{{ $switchUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" title="{{ $name }}" class="px-2.5 py-2 uppercase transition {{ app()->getLocale() === $code ? 'text-white' : 'text-white/45 hover:text-white' }}">{{ $code }}</a>
                     @endforeach
                 </div>
-                <a href="{{ route('resume') }}" target="_blank" class="btn btn-ghost hidden !py-2 md:inline-flex">{{ __('Letölthető verzió') }}</a>
-                <a href="{{ route('contact') }}" class="btn btn-primary hidden !py-2 sm:inline-flex">{{ __('Kapcsolat') }}</a>
+                <a href="{{ route('resume') }}" target="_blank" class="btn btn-ghost inline-flex !px-3 !py-2 text-xs sm:text-sm">{{ __('Letölthető verzió') }}</a>
+                <a href="{{ route('contact') }}" class="btn btn-primary hidden !py-2 lg:inline-flex">{{ __('Kapcsolat') }}</a>
                 <button @click="open = !open" class="grid h-10 w-10 place-items-center rounded-lg border border-white/10 lg:hidden" aria-label="Menü">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
                 </button>
             </div>
         </div>
         <nav x-show="open" x-cloak @click.outside="open = false" class="border-t border-white/5 px-5 pb-4 lg:hidden">
-            @foreach ($links + ['contact' => __('Kapcsolat'), 'resume' => __('Letölthető verzió')] as $route => $label)
-                <a href="{{ route($route) }}" @if ($route === 'resume') target="_blank" @endif class="block border-b border-white/5 py-3 {{ $activeKey === $route ? 'text-[var(--accent-from)]' : 'text-white/70' }}">{{ $label }}</a>
+            @foreach ($links + ['contact' => __('Kapcsolat')] as $route => $label)
+                <a href="{{ route($route) }}" class="block border-b border-white/5 py-3 {{ $activeKey === $route ? 'text-[var(--accent-from)]' : 'text-white/70' }}">{{ $label }}</a>
             @endforeach
+            <div class="flex items-center gap-4 pt-3 text-sm font-medium" role="group" aria-label="{{ __('Nyelv') }}">
+                @foreach (config('app.locales') as $code => $name)
+                    <a href="{{ $switchUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" title="{{ $name }}" class="uppercase transition {{ app()->getLocale() === $code ? 'text-[var(--accent-from)]' : 'text-white/60' }}">{{ $code }}</a>
+                @endforeach
+            </div>
         </nav>
     </header>
 
