@@ -22,8 +22,8 @@
     @endif
 
     <template x-teleport="body">
-        <div x-show="show" x-cloak x-transition.opacity class="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm sm:p-8" @click.self="show = false" role="dialog" aria-modal="true" aria-label="{{ __('Projektek') }}">
-            <div class="relative w-full max-w-6xl rounded-2xl border border-white/10 bg-[#0d0d0f] p-6 sm:p-8">
+        <div x-show="show" x-cloak x-transition.opacity class="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-ink/80 p-4 backdrop-blur-sm sm:p-8" @click.self="show = false" role="dialog" aria-modal="true" aria-label="{{ __('Projektek') }}">
+            <div class="relative w-full max-w-6xl rounded-2xl border border-white/10 bg-panel p-6 sm:p-8">
                 <div class="mb-6 flex items-center justify-between">
                     <h2 class="section-title text-3xl">{{ $label }}</h2>
                     <button type="button" @click="show = false" class="grid h-10 w-10 place-items-center rounded-lg border border-white/10 text-xl hover:bg-white/5" aria-label="{{ __('Bezárás') }}">×</button>

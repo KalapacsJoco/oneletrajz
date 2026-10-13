@@ -11,6 +11,14 @@
         <meta property="og:image" content="{{ $photo }}">
     @endif
     <meta name="theme-color" content="#090909">
+    <script>
+        (function () {
+            var t = 'dark';
+            try { t = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
+            document.documentElement.dataset.theme = t;
+            document.querySelector('meta[name=theme-color]').setAttribute('content', t === 'light' ? '#f3ebe6' : '#090909');
+        })();
+    </script>
     @vite(['resources/js/app.js'])
     @livewireStyles
     <style>:root{--accent-from: {{ $profile->accent_from ?: '#e63946' }}; --accent-to: {{ $profile->accent_to ?: '#2ec27e' }};}</style>
@@ -32,10 +40,10 @@
             : route('home', ['locale' => $l]);
     @endphp
 
-    <header x-data="{ open: false }" class="sticky top-0 z-50 border-b border-white/5 bg-[#090909]/80 backdrop-blur-xl">
+    <header x-data="{ open: false }" class="sticky top-0 z-50 border-b border-white/5     bg-ink/80 backdrop-blur-xl">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <span class="grid h-9 w-9 place-items-center rounded-lg bg-[var(--accent-from)] font-impact text-lg text-white">{{ $initials }}</span>
+                    <span class="keep-white grid h-9 w-9 place-items-center rounded-lg bg-[var(--accent-from)] font-impact text-lg text-white">{{ $initials }}</span>
                 <span class="hidden font-display text-sm font-semibold tracking-wide sm:block">{{ $profile->name }}</span>
             </a>
 
@@ -54,6 +62,9 @@
                         <a href="{{ $switchUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" title="{{ $name }}" class="px-2.5 py-2 uppercase transition {{ app()->getLocale() === $code ? 'text-white' : 'text-white/45 hover:text-white' }}">{{ $code }}</a>
                     @endforeach
                 </div>
+                <button type="button" onclick="window.toggleTheme()" class="hidden h-10 w-10 place-items-center rounded-lg border border-white/10 text-white/70 transition hover:text-white lg:grid" aria-label="{{ __('Téma váltása') }}" title="{{ __('Téma váltása') }}">
+                    @include('partials.theme-icons')
+                </button>
                 <a href="{{ route('resume') }}" target="_blank" class="btn btn-ghost inline-flex !px-3 !py-2 text-xs sm:text-sm">{{ __('Letölthető verzió') }}</a>
                 <a href="{{ route('contact') }}" class="btn btn-primary hidden !py-2 lg:inline-flex">{{ __('Kapcsolat') }}</a>
                 <button @click="open = !open" class="grid h-10 w-10 place-items-center rounded-lg border border-white/10 lg:hidden" aria-label="Menü">
@@ -70,6 +81,11 @@
                     <a href="{{ $switchUrl($code) }}" hreflang="{{ $code }}" lang="{{ $code }}" title="{{ $name }}" class="uppercase transition {{ app()->getLocale() === $code ? 'text-[var(--accent-from)]' : 'text-white/60' }}">{{ $code }}</a>
                 @endforeach
             </div>
+            <button type="button" onclick="window.toggleTheme()" class="mt-3 flex w-full items-center gap-3 border-t border-white/5 pt-3 text-sm text-white/70">
+                @include('partials.theme-icons')
+                <span class="theme-show-dark">{{ __('Nappali mód') }}</span>
+                <span class="theme-show-light">{{ __('Éjszakai mód') }}</span>
+            </button>
         </nav>
     </header>
 

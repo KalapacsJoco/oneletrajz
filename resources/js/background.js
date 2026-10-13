@@ -42,10 +42,21 @@ export function initBackground() {
     const ctx = canvas.getContext('2d');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const motifs = JSON.parse(canvas.dataset.motifs || '[]');
-    const styles = getComputedStyle(document.documentElement);
-    const red = hexToRgb(styles.getPropertyValue('--accent-from') || '#e63946');
-    const green = hexToRgb(styles.getPropertyValue('--accent-to') || '#2ec27e');
-    const colorOf = { white: [235, 235, 245], red, green };
+    let red = [230, 57, 70], green = [46, 194, 126], ink = [255, 255, 255];
+    let colorOf = { white: ink, red, green };
+    let lastTheme = null;
+
+    // A téma (éjszakai / nappali) váltásakor újraolvassuk a színeket
+    const syncTheme = () => {
+        const theme = document.documentElement.dataset.theme || 'dark';
+        if (theme === lastTheme) return;
+        lastTheme = theme;
+        const styles = getComputedStyle(document.documentElement);
+        red = hexToRgb(styles.getPropertyValue('--accent-from') || '#e63946');
+        green = hexToRgb(styles.getPropertyValue('--accent-to') || '#2ec27e');
+        ink = theme === 'light' ? [16, 64, 42] : [255, 255, 255];
+        colorOf = { white: ink, red, green };
+    };
 
     let W = 0, H = 0, dpr = 1;
     let mx = 0, my = 0, tmx = 0, tmy = 0;
@@ -73,7 +84,7 @@ export function initBackground() {
                 const txt = set.items[Math.floor(Math.random() * set.items.length)];
                 const long = txt.length > 3;
                 glyphs.push({
-                    txt, color: colorOf[set.color], x: Math.random(), y: Math.random() * (H + 300),
+                    txt, key: set.color, x: Math.random(), y: Math.random() * (H + 300),
                     size: long ? rand(18, 30) : rand(36, 110), depth: rand(.08, .5),
                     rot: rand(-.5, .5), vr: rand(-.1, .1) * .3, ph: rand(0, 6.28),
                     alpha: rand(.035, .09),
@@ -92,6 +103,8 @@ export function initBackground() {
     };
 
     const draw = (t) => {
+        syncTheme();
+        const light = lastTheme === 'light';
         ctx.clearRect(0, 0, W, H);
         mx += (tmx - mx) * .05; my += (tmy - my) * .05;
         const sy = scrollY;
@@ -102,8 +115,8 @@ export function initBackground() {
             const y = mod(s.y * (H + m * 2) - sy * s.depth, H + m * 2) - m + my * s.depth * 60;
             const x = s.x * W + mx * s.depth * 60;
             const a = reduced ? .6 : .35 + .65 * (.5 + .5 * Math.sin(t * s.speed + s.phase));
-            const c = s.warm ? red : [255, 255, 255];
-            ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a * .85})`;
+            const c = s.warm ? red : ink;
+            ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a * (light ? .55 : .85)})`;
             ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.283); ctx.fill();
         });
 
@@ -124,8 +137,8 @@ export function initBackground() {
                 p.forEach(([x, y], i) => {
                     const tw = .7 + .3 * Math.sin(t * 1.5 + i);
                     const g = ctx.createRadialGradient(x, y, 0, x, y, 10);
-                    g.addColorStop(0, `rgba(255,255,255,${.9 * tw})`);
-                    g.addColorStop(1, 'rgba(255,255,255,0)');
+                    g.addColorStop(0, `rgba(${ink[0]},${ink[1]},${ink[2]},${(light ? .6 : .9) * tw})`);
+                    g.addColorStop(1, `rgba(${ink[0]},${ink[1]},${ink[2]},0)`);
                     ctx.fillStyle = g;
                     ctx.beginPath(); ctx.arc(x, y, 10, 0, 6.283); ctx.fill();
                 });
@@ -142,8 +155,8 @@ export function initBackground() {
                     const k = shooting.life / .9;
                     const x = shooting.x + k * 320, y = shooting.y + k * 160;
                     const g = ctx.createLinearGradient(x, y, x - 120, y - 60);
-                    g.addColorStop(0, 'rgba(255,255,255,.9)');
-                    g.addColorStop(1, 'rgba(255,255,255,0)');
+                    g.addColorStop(0, `rgba(${ink[0]},${ink[1]},${ink[2]},.8)`);
+                    g.addColorStop(1, `rgba(${ink[0]},${ink[1]},${ink[2]},0)`);
                     ctx.strokeStyle = g; ctx.lineWidth = 1.6;
                     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 120, y - 60); ctx.stroke();
                     if (k >= 1) shooting = null;
@@ -160,7 +173,8 @@ export function initBackground() {
             ctx.translate(x, y);
             ctx.rotate(g.rot + (reduced ? 0 : Math.sin(t * .15 + g.ph) * .15 + t * g.vr * .1));
             ctx.font = `${g.size}px "Space Grotesk Variable", "Segoe UI Symbol", "Apple Symbols", serif`;
-            ctx.fillStyle = `rgba(${g.color[0]},${g.color[1]},${g.color[2]},${g.alpha})`;
+            const gc = colorOf[g.key];
+            ctx.fillStyle = `rgba(${gc[0]},${gc[1]},${gc[2]},${g.alpha * (light ? 1.4 : 1)})`;
             ctx.textAlign = 'center';
             ctx.fillText(g.txt, 0, 0);
             ctx.restore();
@@ -183,6 +197,7 @@ export function initBackground() {
     resize();
     if (reduced) {
         draw(0);
+        addEventListener('themechange', () => draw(0));
         addEventListener('scroll', () => draw(0), { passive: true });
     } else {
         raf = requestAnimationFrame(loop);

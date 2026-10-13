@@ -22,7 +22,7 @@
                     </figure>
                     <script>if (sessionStorage.getItem('photoIntroSeen') || document.referrer.startsWith(location.origin)) document.currentScript.previousElementSibling.style.visibility = '';</script>
                     <template x-teleport="body">
-                    <div x-show="visible" x-cloak x-transition.opacity.duration.500ms class="fixed bottom-3 left-3 z-[9999] w-[15rem] overflow-hidden rounded-lg border border-[#3c3c3c] bg-[#1e1e1e] text-left font-mono text-[10px] leading-4 text-[#d4d4d4] opacity-100 shadow-2xl shadow-black/70 sm:bottom-4 sm:left-4 sm:w-[30rem] sm:text-[13px] sm:leading-6" aria-hidden="true">
+                    <div x-show="visible" x-cloak x-transition.opacity.duration.500ms class="keep-white fixed bottom-3 left-3 z-[9999] w-[15rem] overflow-hidden rounded-lg border border-[#3c3c3c] bg-[#1e1e1e] text-left font-mono text-[10px] leading-4 text-[#d4d4d4] opacity-100 shadow-2xl shadow-black/70 sm:bottom-4 sm:left-4 sm:w-[30rem] sm:text-[13px] sm:leading-6" aria-hidden="true">
                         <div class="relative hidden h-8 items-center justify-center bg-[#323233] text-xs text-[#cccccc] sm:flex">
                             <span class="absolute left-3 flex gap-1.5"><i class="size-3 rounded-full bg-[#ff5f56]"></i><i class="size-3 rounded-full bg-[#ffbd2e]"></i><i class="size-3 rounded-full bg-[#27c93f]"></i></span>
                             home.blade.php — oneletrajz — Visual Studio Code

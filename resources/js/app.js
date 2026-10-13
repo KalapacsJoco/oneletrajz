@@ -9,6 +9,15 @@ window.gsap = gsap;
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Éjszakai / nappali téma váltása, a választás megmarad
+window.toggleTheme = () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    document.querySelector('meta[name=theme-color]')?.setAttribute('content', next === 'light' ?         '#f3ebe6' : '#090909');
+    window.dispatchEvent(new Event('themechange'));
+};
+
 // Gépelő szerepváltó (Alpine komponens)
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('typer', (words = []) => ({
@@ -54,27 +63,27 @@ document.addEventListener('alpine:init', () => {
             const finalClasses = figure.className.split(/\s+/).filter(Boolean);
             figure.className = '';
             this.visible = true;
-            figure.classList.add('transition-all', 'duration-500', 'ease-out');
+            figure.classList.add('transition-all', 'duration-400', 'ease-out');
 
             const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
             (async () => {
-                await sleep(1350);
+                await sleep(1080);
                 for (const cls of finalClasses) {
                     for (let i = 1; i <= cls.length; i++) {
                         this.current = cls.slice(0, i);
-                        await sleep(34 + Math.random() * 30);
+                        await sleep(27 + Math.random() * 24);
                     }
-                    await sleep(190);
+                    await sleep(150);
                     this.typed.push(cls);
                     this.current = '';
                     this.saved = false;
                     figure.classList.add(cls);
-                    await sleep(675);
+                    await sleep(540);
                 }
                 this.saved = true;
-                await sleep(1050);
+                await sleep(840);
                 this.visible = false;
-                figure.classList.remove('transition-all', 'duration-500', 'ease-out');
+                figure.classList.remove('transition-all', 'duration-400', 'ease-out');
             })();
         },
     }));
