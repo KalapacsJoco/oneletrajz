@@ -15,11 +15,41 @@
             <div class="hero-word pointer-events-none text-center lg:absolute lg:inset-x-0 lg:top-0 lg:z-0" style="font-size: min(17vw, 15rem)" aria-hidden="true">{{ $word }}</div>
 
             <div class="relative flex flex-col items-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:top-[12rem] lg:flex-row-reverse lg:items-center lg:justify-between lg:px-4">
-            <div class="relative z-10 flex justify-center">
+            <div class="relative z-10 flex justify-center" x-data="photoIntro">
                 @if ($photoUrl)
-                    <figure class="hero-photo mt-2 aspect-square w-60 sm:w-72 lg:mt-0 lg:w-[23rem]">
+                    <figure x-ref="figure" class="w-60 aspect-square sm:w-72 lg:w-[23rem] hero-photo mt-2 lg:mt-0" style="visibility:hidden">
                         <img src="{{ $photoUrl }}" alt="{{ $profile->name }}" class="h-full w-full object-cover object-top">
                     </figure>
+                    <script>if (sessionStorage.getItem('photoIntroSeen') || document.referrer.startsWith(location.origin)) document.currentScript.previousElementSibling.style.visibility = '';</script>
+                    <template x-teleport="body">
+                    <div x-show="visible" x-cloak x-transition.opacity.duration.500ms class="fixed bottom-3 left-3 z-[9999] w-[15rem] overflow-hidden rounded-lg border border-[#3c3c3c] bg-[#1e1e1e] text-left font-mono text-[10px] leading-4 text-[#d4d4d4] opacity-100 shadow-2xl shadow-black/70 sm:bottom-4 sm:left-4 sm:w-[30rem] sm:text-[13px] sm:leading-6" aria-hidden="true">
+                        <div class="relative hidden h-8 items-center justify-center bg-[#323233] text-xs text-[#cccccc] sm:flex">
+                            <span class="absolute left-3 flex gap-1.5"><i class="size-3 rounded-full bg-[#ff5f56]"></i><i class="size-3 rounded-full bg-[#ffbd2e]"></i><i class="size-3 rounded-full bg-[#27c93f]"></i></span>
+                            home.blade.php — oneletrajz — Visual Studio Code
+                        </div>
+                        <div class="flex h-6 items-end bg-[#252526] text-[10px] sm:h-9 sm:text-xs">
+                            <div class="flex h-6 items-center gap-2 border-t border-t-[#007acc] bg-[#1e1e1e] px-3 text-white sm:h-9">
+                                <span class="font-bold text-[#e44d26]">&lt;/&gt;</span>
+                                <span>home.blade.php</span>
+                                <span class="ml-2 inline-block size-2 rounded-full" :class="saved ? 'bg-transparent' : 'bg-[#c5c5c5]'"></span>
+                            </div>
+                        </div>
+                        <div class="hidden border-b border-[#2b2b2b] px-4 py-0.5 text-[11px] text-[#a9a9a9] sm:block">resources › views › pages › home.blade.php</div>
+                        <div class="px-0 py-1 sm:py-2">
+                            <div class="flex"><span class="w-7 shrink-0 select-none pr-2 text-right text-[#858585] sm:w-10 sm:pr-4">18</span><span><span class="text-[#808080]">&lt;</span><span class="text-[#569cd6]">figure</span></span></div>
+                            <div class="flex"><span class="w-7 shrink-0 select-none pr-2 text-right text-[#858585] sm:w-10 sm:pr-4">19</span><span class="pl-2 sm:pl-4"><span class="text-[#9cdcfe]">class</span><span class="text-[#d4d4d4]">=</span><span class="text-[#ce9178]">"</span></span></div>
+                            <template x-for="(c, i) in typed" :key="c">
+                                <div class="flex" :class="i < typed.length - 2 && 'max-sm:hidden'"><span class="w-7 shrink-0 select-none pr-2 text-right text-[#858585] sm:w-10 sm:pr-4" x-text="20 + i"></span><span class="pl-4 text-[#ce9178] sm:pl-8" x-text="c"></span></div>
+                            </template>
+                            <div class="flex bg-[#2a2d2e]"><span class="w-7 shrink-0 select-none pr-2 text-right text-white sm:w-10 sm:pr-4" x-text="20 + typed.length"></span><span class="pl-4 text-[#ce9178] sm:pl-8"><span x-text="current"></span><span class="ml-px inline-block h-3 w-[2px] translate-y-0.5 animate-pulse bg-[#aeafad] sm:h-4"></span></span></div>
+                            <div class="flex"><span class="w-7 shrink-0 select-none pr-2 text-right text-[#858585] sm:w-10 sm:pr-4" x-text="21 + typed.length"></span><span class="pl-2 sm:pl-4"><span class="text-[#ce9178]">"</span><span class="text-[#808080]">&gt;</span></span></div>
+                        </div>
+                        <div class="flex h-5 items-center justify-between bg-[#007acc] px-3 font-sans text-[10px] text-white sm:h-6 sm:text-[11px]">
+                            <span>⎇ main</span>
+                            <span x-text="saved ? 'Saved' : 'Ln ' + (20 + typed.length)"></span>
+                        </div>
+                    </div>
+                    </template>
                 @else
                     <div class="photo-fade relative -mt-4 grid h-80 w-72 place-items-center overflow-hidden rounded-t-[3rem] border border-white/10 bg-gradient-to-b from-white/10 to-transparent lg:mt-0 lg:h-96 lg:w-[26rem]">
                         <div class="checker-mini absolute inset-0 opacity-10"></div>
